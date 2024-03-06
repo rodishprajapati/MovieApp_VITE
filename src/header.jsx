@@ -20,6 +20,7 @@ const Header = (props) => {
             </>
           )}
         </div>
+
         <div>
           {props.title === "Movies" && (
             <>
@@ -33,6 +34,22 @@ const Header = (props) => {
               >
                 +
               </button>
+            </>
+          )}
+        </div>
+
+        <div>
+          {props.title === "Edit Movies" && (
+            <>
+              <button
+                className="bg-blue-900 h-6 w-10 rounded-md m-0 float-left"
+                onClick={() => {
+                  navigate(-1);
+                }}
+              >
+                back
+              </button>
+              <div className="flex justify-between">{props.title}</div>
             </>
           )}
         </div>

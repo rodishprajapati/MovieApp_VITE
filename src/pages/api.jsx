@@ -1,9 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Header from "../header";
+// import EditMovies from "./editMovies";
+import { useNavigate } from "react-router-dom";
+import { Button, Empty } from "antd";
 
 const API = () => {
   const [movies, setMovies] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     getMovies();
   }, []);
@@ -31,18 +35,19 @@ const API = () => {
       <div>
         <Header title="Movies" />
 
-        <div className="body bg-zinc-700">
-          <div className="bg-blue-400 h-fitflex flex-direction-row ">
+        <div className="body bg-zinc-700 h-full">
+          {/* <div className="bg-blue-400 h-fitflex flex-direction-row ">
             <button className="bg-blue-900 h-6 w-10 rounded-md m-1 float-left">
               back
             </button>
-            {/* <Navigate to="/addMovie"/> */}
-          </div>
+            <Navigate to="/addMovie"/>
+          </div> */}
 
           {movies.length < 1 && (
             <>
               <div className="text-white justify-items-center items-center">
                 No Movies available!!
+                <Empty />;
               </div>
             </>
           )}
@@ -50,7 +55,7 @@ const API = () => {
           {movies.map((movie) => {
             return (
               <>
-                <div className="flex flex-direction-rows w-full">
+                <div className="flex flex-direction-rows w-full h-[100vh]">
                   <div className="float-left w-full bg-zinc-500 m-2 rounded">
                     <div>
                       <h1>Movie Name: {movie.name}</h1>
@@ -61,12 +66,34 @@ const API = () => {
                     <hr />
                   </div>
                   <div className="float-right bg-red-500 flex flex-direction-row">
-                    <button
+                    <Button
+                      className="bg-red-700 h-10 w-[fit-content] rounded-md m-1 mt-5"
+                      onClick={() => navigate(`/addData/${movie._id}`)}
+                    >
+                      {" "}
+                      update
+                    </Button>
+                    {/* <button
+                      className="bg-red-700 h-10 w-[fit-content] rounded-md m-1 mt-5"
+                      onClick={() => navigate(`/addData/${movie._id}`)}
+                    >
+                      update
+                    </button> */}
+
+                    {/* <button
                       className="bg-red-700 h-10 w-10 rounded-md m-1 mt-5"
                       onClick={() => deleteMovie(movie._id)}
                     >
                       X
-                    </button>
+                    </button> */}
+                    <Button
+                      type="primary"
+                      shape="circle"
+                      className="bg-red-700 h-10 w-10 rounded-md m-1 mt-5"
+                      onClick={() => deleteMovie(movie._id)}
+                    >
+                      X
+                    </Button>
                   </div>
                 </div>
               </>

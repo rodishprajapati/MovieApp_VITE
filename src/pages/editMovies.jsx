@@ -1,22 +1,46 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Header from "../header";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const ADMovies = () => {
+const EdiMovies = () => {
+  const { movie_id } = useParams();
   const movieName = useRef();
   const movieRating = useRef();
   const movieInfo = useRef();
   const navigate = useNavigate();
 
-  const addMovie = async () => {
+  useEffect(() => {
+    getSingleMovies(movie_id);
+  }, []);
+
+  const getSingleMovies = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/addData/${movie_id}`
+      );
+      console.log(response.data.data.name);
+
+      movieName.current.value = response.data.data.name;
+      movieRating.current.value = response.data.data.rating;
+      movieInfo.current.value = response.data.data.info;
+
+      //setMovies(response.data.message);
+      console.log(response.data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const editMovie = async () => {
     const dataToSend = {
+      _id: movie_id,
       name: movieName.current.value,
       rating: movieRating.current.value,
       info: movieInfo.current.value,
     };
     try {
-      await axios.post(`http://localhost:8000/addData`, dataToSend);
+      await axios.patch(`http://localhost:8000/addData`, dataToSend);
     } catch (e) {
       console.log(e);
       alert("cannot add Movie");
@@ -25,13 +49,14 @@ const ADMovies = () => {
 
   return (
     <>
-      <div className="bg-zinc-700">
-        <Header title="Add Movies" />
+      <div className="bg-zinc-700 h-[100vh] ">
+        <Header title="Edit Movies" />
 
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            addMovie();
+            //addMovie();
+            editMovie();
             navigate(-1);
           }}
         >
@@ -51,11 +76,11 @@ const ADMovies = () => {
             </div>
           </div>
           <button type="submit" className="bg-green-700 rounded-md">
-            Add Movie
+            Edit Movie
           </button>
         </form>
       </div>
     </>
   );
 };
-export default ADMovies;
+export default EdiMovies;
